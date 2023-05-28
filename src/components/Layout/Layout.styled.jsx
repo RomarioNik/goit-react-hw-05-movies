@@ -8,6 +8,7 @@ export const Wrapper = styled.div`
 `;
 
 export const Container = styled.div`
+  position: relative;
   max-width: 991px;
   width: 100%;
   margin: 0 auto;

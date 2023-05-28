@@ -2,8 +2,7 @@ import styled from 'styled-components';
 
 export const List = styled.ul`
   padding: 20px;
-  /* border-radius: 8px; */
-  background-color: #f2f2f2;
+  background-color: ${({ theme }) => theme.colors.bgAddInfo};
 `;
 
 export const ListItem = styled.li`

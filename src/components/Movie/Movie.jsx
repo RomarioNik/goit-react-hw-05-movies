@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
-import { useParams, Link, Outlet } from 'react-router-dom';
+import { useRef, useEffect, useState, Suspense } from 'react';
+import { useParams, Outlet, useLocation } from 'react-router-dom';
+import Loader from 'components/Loader';
 import { getMovie } from '../../services/movieApi';
 import {
   Wrapper,
+  LinkWrapper,
+  LinkGoBack,
   AboutWrapper,
   Description,
   DescriptionItem,
@@ -16,6 +19,7 @@ import {
   ExtraInfoListItem,
   LinkStyled,
 } from './Movie.styled';
+import { ReactComponent as IconArrow } from '../../images/left-arrow.svg';
 
 const Movie = () => {
   const { movieId } = useParams();
@@ -23,13 +27,15 @@ const Movie = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
 
+  const location = useLocation();
+  const backLocationRef = useRef(location.state?.from ?? '/');
+
   useEffect(() => {
     const fatchMovie = async id => {
       try {
         const movie = await getMovie(id);
         setIsLoading(true);
         setMovie(movie.data);
-        console.log('movie data', movie.data);
       } catch (error) {
         console.log(error);
         setIsLoading(false);
@@ -46,13 +52,33 @@ const Movie = () => {
     setActiveTab(index);
   };
 
+  if (!isLoading) {
+    return <Loader />;
+  }
+
   if (isLoading) {
     const { poster_path, title, overview, genres, popularity } = movie;
+
     return (
       <Wrapper>
+        <LinkWrapper>
+          <LinkGoBack to={backLocationRef.current}>
+            <IconArrow width="30" height="20" /> Go back
+          </LinkGoBack>
+        </LinkWrapper>
         <AboutWrapper>
           <Thumb>
-            <Image src={`https://image.tmdb.org/t/p/w500${poster_path}`} />
+            {!poster_path ? (
+              <Image
+                src={require('../../images/default-poster.jpg')}
+                width="400"
+              />
+            ) : (
+              <Image
+                src={`https://image.tmdb.org/t/p/w500${poster_path}`}
+                width="400"
+              />
+            )}
           </Thumb>
           <Description>
             <DescriptionItem>
@@ -77,18 +103,22 @@ const Movie = () => {
         <AddInfo>Additional information</AddInfo>
         <ExtraInfoWrapper>
           <ExtraInfoList>
-            <ExtraInfoListItem show={activeTab === 1 ? '#f2f2f2' : '#F9FAFF'}>
+            <ExtraInfoListItem show={activeTab === 1 ? '#F8F9F9' : '#F9FAFF'}>
               <LinkStyled
                 to={`/movies/${movieId}/cast`}
                 onClick={() => setActiveIdx(1)}
+                show={activeTab === 1 ? 'orange' : 'blue'}
+                preventScrollReset
               >
                 Cast
               </LinkStyled>
             </ExtraInfoListItem>
-            <ExtraInfoListItem show={activeTab === 2 ? '#f2f2f2' : '#F9FAFF'}>
+            <ExtraInfoListItem show={activeTab === 2 ? '#F8F9F9' : '#F9FAFF'}>
               <LinkStyled
                 to={`/movies/${movieId}/reviews`}
                 onClick={() => setActiveIdx(2)}
+                show={activeTab === 2 ? 'orange' : 'blue'}
+                preventScrollReset
               >
                 Rewiews
               </LinkStyled>
@@ -96,7 +126,9 @@ const Movie = () => {
           </ExtraInfoList>
 
           <ContentWrapper>
-            <Outlet />
+            <Suspense fallback={<Loader />}>
+              <Outlet />
+            </Suspense>
           </ContentWrapper>
         </ExtraInfoWrapper>
       </Wrapper>

@@ -1,4 +1,6 @@
+import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
+import Loader from 'components/Loader';
 import {
   Wrapper,
   Container,
@@ -31,14 +33,16 @@ const Layout = () => {
 
       <Main>
         <Container>
-          <Outlet />
+          <Suspense fallback={<Loader />}>
+            <Outlet />
+          </Suspense>
         </Container>
       </Main>
 
       <Footer>
         <Container>
           <ContentFooterWrapper>
-            <Copyright>&copy; Copyright</Copyright>
+            <Copyright>&copy; End of page</Copyright>
           </ContentFooterWrapper>
         </Container>
       </Footer>

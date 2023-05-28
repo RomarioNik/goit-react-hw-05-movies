@@ -2,7 +2,35 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
-  padding: 30px;
+  padding: 10px 30px 30px 30px;
+`;
+
+export const LinkWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
+export const LinkGoBack = styled(Link)`
+  display: flex;
+  align-items: center;
+  flex-grow: 0;
+  padding: 5px 10px 5px 0;
+  color: ${({ theme }) => theme.colors.mainText};
+
+  &:hover,
+  &:active {
+    color: orange;
+  }
+
+  &:hover > svg,
+  &:active > svg {
+    stroke: orange;
+  }
+
+  & > svg {
+    stroke: ${({ theme }) => theme.colors.mainText};
+  }
 `;
 
 export const AboutWrapper = styled.div`
@@ -11,11 +39,12 @@ export const AboutWrapper = styled.div`
 `;
 
 export const Thumb = styled.div`
-  max-width: 400px;
+  width: 400px;
   height: auto;
 `;
 
 export const Image = styled.img`
+  border-radius: 8px;
   object-fit: cover;
 `;
 
@@ -61,6 +90,10 @@ export const ExtraInfoListItem = styled.li`
 export const LinkStyled = styled(Link)`
   display: block;
   text-align: center;
+  color: ${({ show }) => show};
+  &:hover {
+    color: orange;
+  }
 `;
 
 export const ContentWrapper = styled.div``;

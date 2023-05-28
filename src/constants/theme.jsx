@@ -6,6 +6,7 @@ export const theme = Object.freeze({
     bg: 'rgb(249, 250, 255)',
     bgComponent: '#ffffff',
     bgItems: '#fbfbfb',
+    bgAddInfo: '#F8F9F9',
   },
   shadow: {
     shadowComponent: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
